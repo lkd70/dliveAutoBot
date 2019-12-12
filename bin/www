@@ -1,0 +1,48 @@
+#!/usr/bin/env node
+'use strict';
+
+require('dotenv').config();
+const app = require('../app');
+const debug = require('debug')('dliveautobot:server');
+const err = require('debug')('dliveautobot:server:error');
+const http = require('http');
+const config = require('../config');
+const Bot = require('../includes/bot');
+const fs = require('fs');
+const path = require('path');
+
+// If the API server is active, let's set up the express server
+if (config.api.active) {
+	const server = http.createServer(app);
+	app.set('port', config.api.port);
+
+	const onListening = () => debug(`Server started on port ${config.api.port}`);
+	const onError = error => {
+		if (error.syscall !== 'listen') throw error;
+
+		switch (error.code) {
+		case 'EACCES':
+			err('port/pipe requires elevated privileges');
+			throw new Error('port/pipe requires elevated privileges');
+		case 'EADDRINUSE':
+			err('port/pipe is already in use');
+			throw new Error('port/pipe is already in use');
+		default:
+			throw error;
+		}
+	};
+
+	server.listen(config.api.port);
+	server.on('error', onError);
+	server.on('listening', onListening);
+}
+
+fs.readdir(path.join(__dirname, '/../channels/'), (error, channel_files) => {
+	if (error) {
+		err('Could not scan /channels/ directory: ' + error);
+		throw new Error('Could not scan /channels/ directory: ' + error);
+	}
+
+	// eslint-disable-next-line global-require
+	global.bots = channel_files.map(channel_file => new Bot(require(path.join('../channels/', channel_file)), channel_file.split('.')[0]));
+});
