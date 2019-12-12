@@ -8,6 +8,7 @@
     "url": "https://github.com/lkd70/dliveAutoBot/issues"
   },
   "dependencies": {
+    "cleverbot-free": "^1.0.3",
     "debug": "^2.6.9",
     "dlivetv-api": "^2.1.20",
     "dotenv": "^8.2.0",

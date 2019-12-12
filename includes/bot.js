@@ -51,6 +51,25 @@ module.exports = class {
 				this.api.data.db.findOne({ stream: ls.livestream.id }, (err, doc) => {
 					if (err) {
 						reject(new Error('An error occurred: ' + err));
+					} else if (doc === null) {
+						this.api.data.id = ls.livestream.id;
+						this.api.data.db.insert({
+							stream: ls.livestream.id,
+							title: ls.livestream.title,
+							category: ls.livestream.category.title,
+							messages: 0,
+							duration: 0,
+							start: Date.now(),
+							end: 0,
+							chatters: [],
+							donations: [],
+							hosts: [],
+							followers: []
+						}, (error, newDoc) => {
+							if (!error) {
+								resolve(newDoc);
+							}
+						});
 					} else {
 						resolve(doc);
 					}
