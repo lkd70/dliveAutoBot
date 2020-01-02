@@ -48,11 +48,11 @@ module.exports = class {
 	}
 
 	getAllStreamData() {
-		return new Promise((resolve, reject) => this.api.data.db.find({}, function (err, docs) {
+		return new Promise((resolve, reject) => this.api.data.db.find({}, (err, docs) => {
 			if (err) {
 				reject(new Error('An error occurred ' + err));
 			} else {
-				resolve(docs)
+				resolve(docs);
 			}
 		}));
 	}
@@ -120,9 +120,11 @@ module.exports = class {
 
 	create_config() {
 		// Create arrays if they don't exist to avoid undefined errors
-		if (!('channel_config' in this)) this.channel_config = {
-			...this.init_channel_config
-		};
+		if (!('channel_config' in this)) {
+			this.channel_config = {
+				...this.init_channel_config
+			};
+		}
 		if (!('DisplayName' in this.channel_config)) this.channel_config.DisplayName = this.DisplayName;
 		if (!('active' in this.channel_config)) this.channel_config.active = false;
 		if (!('cooldown' in this.channel_config)) this.channel_config.cooldown = [];
@@ -141,9 +143,9 @@ module.exports = class {
 			if (!('initialize' in m)) m.initialize = [];
 			if (!('listeners' in m)) m.listeners = [];
 			if (!('responses' in m)) m.responses = [];
-			this.channel_config.responses = [...this.channel_config.responses, ...m.responses];
-			this.channel_config.listeners = [...this.channel_config.listeners, ...m.listeners];
-			this.channel_config.initialize = [...this.channel_config.initialize, ...m.initialize];
+			this.channel_config.responses = [ ...this.channel_config.responses, ...m.responses ];
+			this.channel_config.listeners = [ ...this.channel_config.listeners, ...m.listeners ];
+			this.channel_config.initialize = [ ...this.channel_config.initialize, ...m.initialize ];
 		});
 	}
 

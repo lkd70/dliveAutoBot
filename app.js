@@ -16,5 +16,3 @@ app.use('/v1', apiRouter);
 app.use('/*', defaultRoute.get('/*', (req, res) => res.redirect('/v1' + req.originalUrl)));
 
 module.exports = app;
-
-
