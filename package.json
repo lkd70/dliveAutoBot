@@ -25,10 +25,25 @@
   "license": "AGPL-3.0",
   "main": "./bin/www",
   "name": "dliveautobot",
+  "nodemonConfig": {
+    "delay": "2500",
+    "env": {
+      "DEBUG": "dliveAutoBot:*",
+      "NODE_ENV": "dev"
+    },
+    "ignore": [
+      "node_modules/**/node_modules",
+      "store/*",
+      "config_example.js",
+      "channels/channel_example.js"
+    ],
+    "restartable": "r"
+  },
   "private": true,
   "scripts": {
-    "nodemon": "nodemon ./bin/www",
-    "start": "node ./bin/www"
+    "debug": "nodemon ./bin/www",
+    "start": "NODE_ENV=production node ./bin/www",
+    "start_win": "@powershell -Command $env:NODE_ENV='production';node ./bin/www"
   },
   "version": "2.0.0"
 }
