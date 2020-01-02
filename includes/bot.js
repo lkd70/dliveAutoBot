@@ -29,7 +29,7 @@ module.exports = class {
 
 	start(announce = '', error = '') {
 		this.stop();
-		this.api = new DLive(global_config.Dlive.key, this.DisplayName);
+		this.api = new DLive(process.env.KEY | global_config.Dlive.key, this.DisplayName);
 		this.getBotName();
 		this.api.data = {};
 		this.api.data.db = new DataStore({

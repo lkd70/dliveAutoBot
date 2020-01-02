@@ -12,7 +12,7 @@ const fs = require('fs');
 const path = require('path');
 
 // If the API server is active, let's set up the express server
-if (config.api.active) {
+if (process.env.API === true | config.api.active) {
 	const server = http.createServer(app);
 	app.set('port', process.env.PORT | config.api.port);
 
