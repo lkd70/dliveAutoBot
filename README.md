@@ -138,3 +138,39 @@ Example response:
   "success": 1
 }
 ```
+
+### route: `/v1/store/:name`
+Returns all stored streams for the given :name.
+Example URL: `/v1/store/LostInTheWastes`.
+Example response:
+
+```json
+{
+  "api": {
+    "version": 1
+  },
+  "store": [
+    {
+      "stream": "livestream:dlive-29912156+AQJxmRfWg",
+      "title": "testing...",
+      "category": "Coding",
+      "messages": 3,
+      "duration": 0,
+      "start": 1576165324098,
+      "end": 0,
+      "chatters": [
+        "LKDBOT",
+        "LKD70"
+      ],
+      "donations": [],
+      "hosts": [],
+      "followers": [],
+      "_id": "Phg3fzo1Bhr9k2aD",
+      "cleverbot_context": [
+        " Hey there!",
+        " Pretty good, you?"
+      ]
+    }
+  ]
+}
+```

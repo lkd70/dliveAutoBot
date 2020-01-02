@@ -32,7 +32,9 @@ module.exports = class {
 		this.api = new DLive(global_config.Dlive.key, this.DisplayName);
 		this.getBotName();
 		this.api.data = {};
-		this.api.data.db = new DataStore({ filename: `./store/bot_${this.DisplayName}.db` });
+		this.api.data.db = new DataStore({
+			filename: `./store/bot_${this.DisplayName}.db`
+		});
 		this.api.data.db.persistence.setAutocompactionInterval(100000);
 		this.active = true;
 		this.START_TIME = Date.now();
@@ -45,10 +47,22 @@ module.exports = class {
 
 	}
 
+	getAllStreamData() {
+		return new Promise((resolve, reject) => this.api.data.db.find({}, function (err, docs) {
+			if (err) {
+				reject(new Error('An error occurred ' + err));
+			} else {
+				resolve(docs)
+			}
+		}));
+	}
+
 	getCurrentStreamData() {
 		return new Promise((resolve, reject) => this.api.getLivestreamPage(this.api.displayname).then(ls => {
 			if (ls.livestream) {
-				this.api.data.db.findOne({ stream: ls.livestream.id }, (err, doc) => {
+				this.api.data.db.findOne({
+					stream: ls.livestream.id
+				}, (err, doc) => {
 					if (err) {
 						reject(new Error('An error occurred: ' + err));
 					} else if (doc === null) {
@@ -92,15 +106,23 @@ module.exports = class {
 		delete this.api;
 		this.api = {};
 		this.api.name = null;
-		this.api.data = { db: { update: () => '' } };
-		this.channel_config = { ...this.init_channel_config };
+		this.api.data = {
+			db: {
+				update: () => ''
+			}
+		};
+		this.channel_config = {
+			...this.init_channel_config
+		};
 		this.debug('Stopped bot');
 		return 1;
 	}
 
 	create_config() {
 		// Create arrays if they don't exist to avoid undefined errors
-		if (!('channel_config' in this)) this.channel_config = { ...this.init_channel_config };
+		if (!('channel_config' in this)) this.channel_config = {
+			...this.init_channel_config
+		};
 		if (!('DisplayName' in this.channel_config)) this.channel_config.DisplayName = this.DisplayName;
 		if (!('active' in this.channel_config)) this.channel_config.active = false;
 		if (!('cooldown' in this.channel_config)) this.channel_config.cooldown = [];
@@ -119,9 +141,9 @@ module.exports = class {
 			if (!('initialize' in m)) m.initialize = [];
 			if (!('listeners' in m)) m.listeners = [];
 			if (!('responses' in m)) m.responses = [];
-			this.channel_config.responses = [ ...this.channel_config.responses, ...m.responses ];
-			this.channel_config.listeners = [ ...this.channel_config.listeners, ...m.listeners ];
-			this.channel_config.initialize = [ ...this.channel_config.initialize, ...m.initialize ];
+			this.channel_config.responses = [...this.channel_config.responses, ...m.responses];
+			this.channel_config.listeners = [...this.channel_config.listeners, ...m.listeners];
+			this.channel_config.initialize = [...this.channel_config.initialize, ...m.initialize];
 		});
 	}
 
@@ -170,7 +192,9 @@ module.exports = class {
 				for (let i = 0; i < this.channel_config.responses.length; i++) {
 					const resp = this.channel_config.responses[i];
 					if (resp.match.test(msg)) {
-						let { response } = resp;
+						let {
+							response
+						} = resp;
 						if (Array.isArray(response)) {
 							response = response[Math.floor(Math.random() * response.length)];
 							this.send(response.format(res));

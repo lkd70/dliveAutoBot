@@ -3,13 +3,7 @@
 const express = require('express');
 const router = express.Router();
 
-router.get('/', (req, res, next) => {
-	res.json({
-		api: {
-			version: 1
-		}
-	});
-});
+router.get('/', (req, res, next) => res.json({ api: { version: 1 } }));
 
 router.get('/bots', (req, res, next) => {
 	const resp = { api: { version: 1 }, bots: [] };
@@ -22,6 +16,13 @@ router.get('/bots', (req, res, next) => {
 	res.json(resp);
 });
 
+router.get('/store/:name', (req, res, next) => {
+	const resp = { api: { version: 1 } };
+	global.bots.filter(b => req.params.name === b.DisplayName).map(bot => bot.getAllStreamData().then(data => {
+		resp.store = data;
+		res.json(resp);
+	}));
+});
 
 router.get('/bot/:name', (req, res, next) => {
 	const resp = { api: { version: 1 }, bots: [] };
