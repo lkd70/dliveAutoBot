@@ -14,7 +14,7 @@ const path = require('path');
 // If the API server is active, let's set up the express server
 if (config.api.active) {
 	const server = http.createServer(app);
-	app.set('port', config.api.port);
+	app.set('port', process.env.PORT | config.api.port);
 
 	const onListening = () => debug(`Server started on port ${config.api.port}`);
 	const onError = error => {
@@ -32,7 +32,7 @@ if (config.api.active) {
 		}
 	};
 
-	server.listen(config.api.port);
+	server.listen(process.env.PORT | config.api.port);
 	server.on('error', onError);
 	server.on('listening', onListening);
 }
